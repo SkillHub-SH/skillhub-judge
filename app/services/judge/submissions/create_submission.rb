@@ -13,7 +13,7 @@ module Judge
 
       def create
         response = post_submission
-        return false unless response.code == '201'
+        return [false, response.code] unless response.code == '201'
 
         response_body = JSON.parse(response.body)
         submission = Submission.new(@params.merge!(response_body))

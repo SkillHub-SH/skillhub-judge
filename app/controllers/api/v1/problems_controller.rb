@@ -2,7 +2,7 @@ module Api
   module V1
     # Problems controller, contains the following actions:
     class ProblemsController < ApplicationController
-      before_action :find_topic, only: :index
+      before_action :find_topic, only: %i[index]
       before_action :find_problem, only: :show
 
       def index
@@ -12,6 +12,11 @@ module Api
 
       def show
         render json: @problem, serializer: Api::V1::ProblemSerializer, status: :ok
+      end
+
+      def recommended_problems
+        problems = Problem.last(5)
+        render json: problems, each_serializer: Api::V1::ProblemSerializer, status: :ok
       end
 
       private

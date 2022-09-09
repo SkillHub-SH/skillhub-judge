@@ -23,6 +23,7 @@ class Company < ApplicationRecord
   # Associations
   has_many :problems, dependent: :destroy
   has_many :contests, dependent: :destroy
+  has_many :jobs, dependent: :destroy
 
   # Validations
   validates :email, presence: true, uniqueness: { case_sensitive: true }
@@ -30,6 +31,7 @@ class Company < ApplicationRecord
   def jwt_payload
     {
       model: 'company',
+      name: name,
       id: id,
       email: email
     }

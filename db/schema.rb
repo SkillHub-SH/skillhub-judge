@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_07_14_015328) do
+ActiveRecord::Schema.define(version: 2022_07_16_200616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -57,8 +57,33 @@ ActiveRecord::Schema.define(version: 2022_07_14_015328) do
     t.string "bersonal_website_link"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "work_at"
+    t.string "study_at"
+    t.string "current_position"
     t.index ["reset_password_token"], name: "index_developers_on_reset_password_token", unique: true
     t.index ["username"], name: "index_developers_on_username", unique: true
+  end
+
+  create_table "job_applications", force: :cascade do |t|
+    t.bigint "developer_id"
+    t.bigint "company_id"
+    t.bigint "job_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "status", default: "submitted"
+    t.index ["company_id"], name: "index_job_applications_on_company_id"
+    t.index ["developer_id"], name: "index_job_applications_on_developer_id"
+    t.index ["job_id"], name: "index_job_applications_on_job_id"
+  end
+
+  create_table "jobs", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "description", null: false
+    t.string "requirements", null: false
+    t.bigint "company_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["company_id"], name: "index_jobs_on_company_id"
   end
 
   create_table "jwt_denylists", force: :cascade do |t|

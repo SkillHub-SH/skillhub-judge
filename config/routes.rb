@@ -18,13 +18,22 @@ Rails.application.routes.draw do
         namespace :companies do
           resources :problems, only: %i[index create]
           resources :contests, only: %i[index create show]
+          resources :jobs, only: %i[index show create destroy]
+          resources :job_applications, only: %i[index show]
+          resources :profiles, only: %i[show update]
         end
-        resources :problems, only: %i[index show]
+        resources :problems, only: %i[index show] do
+          get :recommended_problems, on: :collection
+        end
         resources :submissions, only: %i[index show create]
         resources :topics, only: :index
         resources :programming_languges, only: %i[index show]
         resources :roadmaps, only: :index
         resources :leaderboards, only: :index
+        resources :jobs, only: %i[index show]
+        resources :job_applications, only: %i[index create]
+        resources :profiles, only: %i[show update]
+        resources :contests, only: :index
       end
     end
     get '/member-data', to: 'members#show'

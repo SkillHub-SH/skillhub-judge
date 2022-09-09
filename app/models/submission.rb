@@ -47,10 +47,44 @@ class Submission < ApplicationRecord
 
   # Callbacks
   after_create :update_developer_rank
+  after_create :set_result
 
   def update_developer_rank
     return unless status.equal?('Accepted')
 
     developer.update_rank(problem.score)
+  end
+
+  private
+
+  def set_result
+    uri = URI("https://judge0-ce.p.rapidapi.com/submissions/#{token}?base64_encoded=true&fields=*")
+    request_header = {
+      'Content-Type' => 'application/json',
+      'X-RapidAPI-Key' => 'b3dbae9531mshbbdab592822f11dp1605bejsnf25649f22823',
+      'X-RapidAPI-Host' => 'judge0-ce.p.rapidapi.com'
+    }
+
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = true
+    http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+
+    request = Net::HTTP::Get.new(uri.path, request_header)
+    response = http.request(request)
+
+    response_body = JSON.parse(response.body)
+    params = create_params_hash(response_body)
+
+    errors.add(:base, 'Unexpected error') unless update(params)
+  end
+
+  def create_params_hash(resbonse_body)
+    {
+      programming_languges_id: ProgrammingLanguge.find_by(judge_code: resbonse_body['language_id'])&.id || 5,
+      time_limit: resbonse_body['time'],
+      memory_limit: resbonse_body['memory'],
+      output: resbonse_body['stdout'],
+      status: resbonse_body['status']['description']
+    }
   end
 end

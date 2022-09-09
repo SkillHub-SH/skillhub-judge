@@ -5,6 +5,7 @@
 #  id                     :bigint           not null, primary key
 #  bersonal_website_link  :string
 #  bio                    :text
+#  current_position       :string
 #  email                  :string           default(""), not null
 #  encrypted_password     :string           default(""), not null
 #  facebook_link          :string
@@ -14,8 +15,10 @@
 #  reset_password_sent_at :datetime
 #  reset_password_token   :string
 #  stackoverflow_link     :string
+#  study_at               :string
 #  twitter_link           :string
 #  username               :string
+#  work_at                :string
 #  created_at             :datetime         not null
 #  updated_at             :datetime         not null
 #

@@ -6,6 +6,10 @@ module Api
                    :input, :output, :input_description, :output_description, :notes, :score,
                    :accepted_percentage, :created_at, :updated_at, :company_id, :contest_id
         belongs_to :topic
+
+        def accepted_percentage
+          object.accepted_percentage
+        end
       end
     end
   end
